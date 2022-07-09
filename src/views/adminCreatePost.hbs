@@ -1,0 +1,37 @@
+<form role="form" id="create_post">
+    <div class="alert alert-warning mt-2 d-none" role="alert" id="alert">
+    </div>
+    <div class="form-group mb-1">
+        <label>Название</label>
+        <input  class="form-control" id="title" placeholder="Впишите название" required>
+    </div>
+    <div class="form-group mb-1">
+        <label>Контент</label>
+          <textarea class="form-control" id="content" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Создать</button>
+</form>
+
+<script>
+    document.getElementById('create_post').addEventListener('submit', evt => {
+        evt.preventDefault();
+        const form = evt.target;
+        const body = JSON.stringify({
+            title: form.elements.title.value,
+            content: form.elements.content.value,
+        });
+        const headers = { 'Content-Type': 'application/json' };
+        const alertContainer = document.getElementById('alert');
+        fetch('/api/post', { method: 'post', body, headers }).then(async resp => {
+            const answer = await resp.json()
+            if (answer.statusCode < 200 || answer.statusCode >= 300) {
+                alertContainer.classList.remove('d-none')
+                alertContainer.innerHTML = `Запрос отклонен со статусом ${answer.statusCode} : ${answer.message}`
+            }
+            else {
+                alertContainer.classList.remove('d-none')
+                alertContainer.innerHTML = 'Пост успешно создан'
+            }
+        })
+    })
+</script

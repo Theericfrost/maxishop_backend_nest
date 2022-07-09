@@ -1,0 +1,18 @@
+<table class='table'>
+  <thead>
+    <tr>
+      <th scope='col'>#</th>
+      <th scope='col'>Название</th>
+      <th scope='col'>Контент</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each posts}}
+      <tr>
+        <th scope='row'>{{@index}}</th>
+        <td> {{title}} </td>
+        <td> {{content}} </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

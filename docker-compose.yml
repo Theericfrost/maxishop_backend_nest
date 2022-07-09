@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+    ports:
+      - "3003:3003"
+    command: yarn start:dev
+    environment:
+      - POSTGRES_HOST=host.docker.internal
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=postgres
+      - JWT_SECRET=maxishop
+      - JWT_EXPIRATION_TIME=86400
+      - PORT=3003
+      - NODE_ENV=prod
+    depends_on:
+      - postgres
+  postgres:
+    container_name: maxishop_db
+    image: postgres:13.1
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: postgres
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres

@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <div class="h-100 d-flex align-items-center justify-content-center">
+    <div class="card">
+      <div class="card-body">
+        <form role="form" id="login_form">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Email</span>
+            <input type="text" class="form-control" placeholder="Впишите email" aria-label="Email"
+              aria-describedby="basic-addon1" name="email" />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Пароль</span>
+            <input type="text" class="form-control" placeholder="Впишите пароль" aria-label="Password"
+              aria-describedby="basic-addon1" name="password" />
+          </div>
+          <button type="submit" class="btn btn-primary">Войти</button>
+          <div class="alert alert-danger mt-2 d-none" role="alert" id="alert">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('login_form').addEventListener('submit', evt => {
+    evt.preventDefault();
+    const form = evt.target;
+    const body = JSON.stringify({
+      email: form.elements.email.value, password: form.elements.password.value,
+    });
+    const headers = { 'Content-Type': 'application/json' };
+    const errorContainer = document.getElementById('alert');
+    fetch('/api/authentication/log-in', { method: 'post', body, headers }).then(async resp => {
+      const answer = await resp.json()
+      if (answer.statusCode < 200 || answer.statusCode >= 300) {
+        errorContainer.classList.remove('d-none')
+        errorContainer.innerHTML = `Запрос отклонен со статусом ${answer.statusCode} : ${answer.message}`
+      }
+      else {
+        errorContainer.classList.add('d-none')
+        window.location.replace('/admin')
+      }
+    })
+  })
+</script>
