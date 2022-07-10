@@ -38,11 +38,15 @@ export class PostController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(IsAdminGuard)
   async updatePost(@Param('id') id: string, @Body() post: UpdatePostDto) {
     return this.postService.updatePost(Number(id), post);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(IsAdminGuard)
   async deletePost(@Param('id') id: string) {
     this.postService.deletePost(Number(id));
   }

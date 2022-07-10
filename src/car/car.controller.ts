@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { IsAdminGuard } from 'src/authentication/guards/isAdmin-authentication.guard';
+import JwtAuthenticationGuard from 'src/authentication/guards/jwt-authentication.guard';
 import { CarService } from './car.service';
 import { CreateCarDto } from './dto/CreateCarDto.dto';
 
@@ -14,6 +16,8 @@ export class CarController {
   }
 
   @Post()
+  @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(IsAdminGuard)
   createCar(@Body() car: CreateCarDto) {
     return this.carService.createCar(car);
   }
